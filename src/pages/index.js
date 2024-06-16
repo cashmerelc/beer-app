@@ -1,17 +1,22 @@
-import Head from "next/head";
+// src/pages/index.js
+import { useSession, signIn, signOut } from "next-auth/react";
 
 export default function Home() {
+  const { data: session } = useSession();
+
   return (
-    <>
-      <Head>
-        <title>Hello World</title>
-        <meta name="description" content="Simple Hello World app" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <main>
-        <h1>Hello World</h1>
-      </main>
-    </>
+    <div>
+      {session ? (
+        <>
+          <p>Signed in as {session.user.email}</p>
+          <button onClick={() => signOut()}>Sign out</button>
+        </>
+      ) : (
+        <>
+          <p>Not signed in</p>
+          <button onClick={() => signIn()}>Sign in</button>
+        </>
+      )}
+    </div>
   );
 }
