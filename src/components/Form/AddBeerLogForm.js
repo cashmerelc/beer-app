@@ -12,7 +12,7 @@ export default function AddBeerLogForm({ beerBattleId }) {
     event.preventDefault();
 
     if (!session) {
-      setError("You must be logged in to add a beer log");
+      console.log("You must be logged in to add a beer log");
       return;
     }
 
