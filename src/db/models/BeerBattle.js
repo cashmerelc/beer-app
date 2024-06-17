@@ -13,6 +13,7 @@ const beerBattleSchema = new Schema({
   duration: { type: Number, required: true }, // duration in days
   startDate: { type: Date, required: true },
   endDate: { type: Date, required: true },
+  inviteCode: { type: String, required: true },
 });
 
 const BeerBattle =

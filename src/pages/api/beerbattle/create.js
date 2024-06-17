@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/authOptions";
 import dbConnect from "../../../db/dbConnect";
 import BeerBattle from "../../../db/models/BeerBattle";
+import { v4 as uuidv4 } from "uuid";
 
 export default async function handler(req, res) {
   await dbConnect();
@@ -20,6 +21,8 @@ export default async function handler(req, res) {
     const endDate = new Date();
     endDate.setDate(startDate.getDate() + parseInt(duration));
 
+    const inviteCode = uuidv4();
+
     const beerBattle = new BeerBattle({
       name,
       creator: session.user.userId,
@@ -27,6 +30,7 @@ export default async function handler(req, res) {
       duration: parseInt(duration),
       startDate,
       endDate,
+      inviteCode,
     });
 
     try {
