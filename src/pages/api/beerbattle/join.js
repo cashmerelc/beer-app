@@ -1,9 +1,13 @@
+import { getServerSession } from "next-auth";
+import { authOptions } from "../auth/authOptions";
 import dbConnect from "../../../db/dbConnect";
 import BeerBattle from "../../../db/models/BeerBattle";
-import { getServerSession } from "next-auth/react";
 
 export default async function handler(req, res) {
-  const session = await getServerSession({ req });
+  await dbConnect();
+
+  const session = await getServerSession(req, res, authOptions);
+  console.log("Session info in join API route: ", session);
 
   if (!session) {
     return res.status(401).json({ error: "Unauthorized" });
@@ -11,8 +15,6 @@ export default async function handler(req, res) {
 
   if (req.method === "POST") {
     const { inviteCode } = req.body;
-
-    await dbConnect();
 
     try {
       const beerBattle = await BeerBattle.findOne({ inviteCode });

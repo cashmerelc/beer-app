@@ -45,7 +45,6 @@ export default function JoinBeerBattleForm() {
         />
       </div>
       <button type="submit">Join Beer Battle</button>
-      {error && <p style={{ color: "red" }}>{error}</p>}
     </form>
   );
 }
