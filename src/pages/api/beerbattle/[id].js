@@ -20,7 +20,7 @@ export default async function handler(req, res) {
           const beerLogs = await BeerLog.find({
             user: participantId,
             beerBattle: id,
-          });
+          }).populate("beer");
           return {
             user,
             beerLogs,
