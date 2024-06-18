@@ -16,6 +16,7 @@ export default function BeerBattleDashboard() {
   const { data: session } = useSession();
   const [daysRemaining, setDaysRemaining] = useState(null);
   const [showBeerSearch, setShowBeerSearch] = useState(false);
+  const [expandedParticipants, setExpandedParticipants] = useState({});
   const [winner, setWinner] = useState(null);
 
   useEffect(() => {
@@ -55,6 +56,13 @@ export default function BeerBattleDashboard() {
     }
   };
 
+  const toggleParticipantLogs = (participantId) => {
+    setExpandedParticipants((prev) => ({
+      ...prev,
+      [participantId]: !prev[participantId],
+    }));
+  };
+
   if (error) return <div>Failed to load</div>;
   if (!data) return <div>Loading...</div>;
 
@@ -80,15 +88,24 @@ export default function BeerBattleDashboard() {
                 <h3>{participant.user.username}</h3>
                 <p>Email: {participant.user.email}</p>
                 <p>Unique Beers Logged: {participant.beerLogs.length}</p>
-                <ul>
-                  {participant.beerLogs.map((log) => (
-                    <li key={log._id}>
-                      <p>Beer: {log.beer.name}</p>
-                      <p>Rating: {log.rating}</p>
-                      <p>Review: {log.review}</p>
-                    </li>
-                  ))}
-                </ul>
+                <button
+                  onClick={() => toggleParticipantLogs(participant.user._id)}
+                >
+                  {expandedParticipants[participant.user._id]
+                    ? "Hide Logs"
+                    : "Show Logs"}
+                </button>
+                {expandedParticipants[participant.user._id] && (
+                  <ul>
+                    {participant.beerLogs.map((log) => (
+                      <li key={log._id}>
+                        <p>Beer: {log.beer.name}</p>
+                        <p>Rating: {log.rating}</p>
+                        <p>Review: {log.review}</p>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </li>
             ))}
           </ul>
