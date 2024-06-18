@@ -9,14 +9,13 @@ const fetcher = (url) => fetch(url).then((res) => res.json());
 export default function BeerBattleDashboard() {
   const router = useRouter();
   const { id } = router.query;
-  const { data, error } = useSWR(
+  const { data, error, mutate } = useSWR(
     () => (id ? `/api/beerbattle/${id}` : null),
     fetcher
   );
   const { data: session } = useSession();
   const [daysRemaining, setDaysRemaining] = useState(null);
   const [showBeerSearch, setShowBeerSearch] = useState(false);
-  const [expandedParticipants, setExpandedParticipants] = useState({});
   const [winner, setWinner] = useState(null);
 
   useEffect(() => {
@@ -56,11 +55,9 @@ export default function BeerBattleDashboard() {
     }
   };
 
-  const toggleParticipantLogs = (participantId) => {
-    setExpandedParticipants((prev) => ({
-      ...prev,
-      [participantId]: !prev[participantId],
-    }));
+  const handleBeerLogAdded = () => {
+    setShowBeerSearch(false);
+    mutate(); // Refetch the data
   };
 
   if (error) return <div>Failed to load</div>;
@@ -89,13 +86,19 @@ export default function BeerBattleDashboard() {
                 <p>Email: {participant.user.email}</p>
                 <p>Unique Beers Logged: {participant.beerLogs.length}</p>
                 <button
-                  onClick={() => toggleParticipantLogs(participant.user._id)}
+                  onClick={() =>
+                    setShowBeerSearch(
+                      showBeerSearch === participant.user._id
+                        ? false
+                        : participant.user._id
+                    )
+                  }
                 >
-                  {expandedParticipants[participant.user._id]
+                  {showBeerSearch === participant.user._id
                     ? "Hide Logs"
                     : "Show Logs"}
                 </button>
-                {expandedParticipants[participant.user._id] && (
+                {showBeerSearch === participant.user._id && (
                   <ul>
                     {participant.beerLogs.map((log) => (
                       <li key={log._id}>
@@ -114,7 +117,9 @@ export default function BeerBattleDashboard() {
           <button onClick={() => setShowBeerSearch(!showBeerSearch)}>
             {showBeerSearch ? "Cancel" : "Add Beer"}
           </button>
-          {showBeerSearch && <BeerSearch beerBattleId={id} />}
+          {showBeerSearch && (
+            <BeerSearch beerBattleId={id} onBeerLogAdded={handleBeerLogAdded} />
+          )}
         </>
       )}
     </div>

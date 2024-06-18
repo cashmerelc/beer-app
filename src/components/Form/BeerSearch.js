@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
-export default function BeerSearch({ beerBattleId }) {
+export default function BeerSearch({ beerBattleId, onBeerLogAdded }) {
   const { data: session } = useSession();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedBeer, setSelectedBeer] = useState(null);
@@ -45,6 +45,7 @@ export default function BeerSearch({ beerBattleId }) {
 
       if (response.ok) {
         console.log("Beer Log Created");
+        onBeerLogAdded();
       } else {
         console.error("Failed to create beer log");
       }
