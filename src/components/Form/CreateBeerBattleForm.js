@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 export default function CreateBeerBattleForm() {
   const { data: session, status } = useSession();
   const [name, setName] = useState("");
   const [duration, setDuration] = useState(0);
   const [error, setError] = useState(null);
+  const router = useRouter();
 
   useEffect(() => {
     if (status === "loading") {
@@ -35,7 +37,8 @@ export default function CreateBeerBattleForm() {
       if (response.ok) {
         const data = await response.json();
         console.log("Beer Battle Created:", data);
-        setError(null); // Clear any previous error
+        setError(null);
+        router.push("/");
       } else {
         const errorData = await response.json();
         setError(errorData.error || "Failed to create Beer Battle");
