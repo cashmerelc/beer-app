@@ -64,7 +64,7 @@ export default function BeerSearch({ beerBattleId }) {
         onChange={(event) => setSearchTerm(event.target.value)}
       />
       <div>
-        {data && data.beers.length > 0 ? (
+        {data && data.beers && data.beers.length > 0 ? (
           <ul>
             {data.beers.map((beer) => (
               <li key={beer._id} onClick={() => handleBeerClick(beer)}>
@@ -76,7 +76,7 @@ export default function BeerSearch({ beerBattleId }) {
           <p>No beers found</p>
         )}
       </div>
-      {searchTerm && data && data.beers.length === 0 && (
+      {searchTerm && data && data.beers && data.beers.length === 0 && (
         <div>
           <p>Beer not found</p>
           <button onClick={() => setShowAddNewBeer(true)}>Add New Beer</button>
