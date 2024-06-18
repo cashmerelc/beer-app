@@ -14,6 +14,7 @@ const beerBattleSchema = new Schema({
   startDate: { type: Date, required: true },
   endDate: { type: Date, required: true },
   inviteCode: { type: String, required: true },
+  status: { type: String, enum: ["ongoing", "ended"], default: "ongoing" },
 });
 
 const BeerBattle =
