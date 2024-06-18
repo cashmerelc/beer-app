@@ -1,4 +1,6 @@
-import "@/styles/globals.css";
+// import "@/styles/globals.css";
+import GlobalStyle from "../styles/GlobalStyles";
+
 import React from "react";
 import { SessionProvider } from "next-auth/react";
 
@@ -8,6 +10,7 @@ export default function App({
 }) {
   return (
     <SessionProvider session={session}>
+      <GlobalStyle />
       <Component {...pageProps} />
     </SessionProvider>
   );
