@@ -1,8 +1,6 @@
 // src/pages/index.js
 import { useSession, signIn, signOut } from "next-auth/react";
-import JoinBeerBattleForm from "../components/Form/JoinBeerBattle";
 import BeerBattleList from "../components/Card/BeerBattleList";
-import Link from "next/link";
 import Image from "next/image";
 import { styled } from "styled-components";
 
@@ -43,8 +41,6 @@ export default function Home() {
       {session ? (
         <>
           <BeerBattleList />
-          <JoinBeerBattleForm />
-          <Link href="/beerbattle">Create Beer Battle</Link>
         </>
       ) : (
         <CenteredContent>
