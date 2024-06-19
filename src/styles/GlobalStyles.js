@@ -12,10 +12,11 @@ const GlobalStyle = createGlobalStyle`
   --color-primary-dark-green: #4C783A;
   --color-primary-red: #D74A49;
   --color-primary-white: #FFFFFF;
+  --color-primary-grey: #eeeeee;
 
   /* Background Colors */
-  --color-bg-main: var(--color-primary-white);
-  --color-bg-secondary: var(--color-primary-light-blue);
+  --color-bg-main: var(--color-primary-grey);
+  --color-bg-secondary: var(--color-primary-white);
   --color-bg-accent: var(--color-primary-dark-blue);
 
   /* Text Colors */
@@ -31,7 +32,7 @@ const GlobalStyle = createGlobalStyle`
   /* Button Colors */
   --color-button-bg: var(--color-primary-green);
   --color-button-text: var(--color-primary-white);
-  --color-button-hover-bg: var(--color-primary-dark-green);
+  --color-button-hover-bg: var(--color-primary-blue);
   --color-button-hover-text: var(--color-primary-light-blue);
 
   /* Link Colors */

@@ -5,7 +5,7 @@ import Link from "next/link";
 
 console.log("Styled: ", styled);
 const Container = styled.div`
-  background-color: var(--color-bg-secondary);
+  background-color: var(--color-bg-main);
   color: var(--text-color);
   padding: 20px;
 `;
@@ -16,19 +16,27 @@ const Title = styled.h2`
 
 const SectionTitle = styled.h3`
   color: var(--color-text-secondary);
-  margin-top: 20px;
+  margin-top: 50px;
 `;
 
 const List = styled.ul`
   list-style: none;
   padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 20px;
 `;
 
 const ListItem = styled.li`
-  background-color: var(--color-bg-accent);
+  width: 30%;
+  height: 150px;
+  background-color: var(--color-bg-secondary);
   margin: 10px 0;
   padding: 10px;
   border-radius: 4px;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+  color: var(--color-text-main);
   &:hover {
     background-color: var(--color-button-hover-bg);
     color: var(--color-text-light);
@@ -36,8 +44,15 @@ const ListItem = styled.li`
 `;
 
 const LinkStyled = styled(Link)`
-  color: var(--color-text-light);
   text-decoration: none;
+  color: inherit;
+`;
+
+const HorizontalRule = styled.hr`
+  border: 0;
+  height: 1px;
+  background: var(--color-text-main);
+  margin: 20px 0;
 `;
 
 export default function BeerBattleList() {
@@ -77,6 +92,7 @@ export default function BeerBattleList() {
   return (
     <Container>
       <Title>Your Beer Battles</Title>
+      <HorizontalRule />
       <div>
         <SectionTitle>Ongoing Battles</SectionTitle>
         {ongoingBattles.length === 0 ? (
@@ -88,6 +104,11 @@ export default function BeerBattleList() {
                 <LinkStyled href={`/beerbattle/${battle._id}`}>
                   {battle.name} - Ends on{" "}
                   {new Date(battle.endDate).toLocaleDateString()}
+                  <p>Days Remaining: </p>
+                  {Math.ceil(
+                    Math.abs(new Date(battle.endDate) - new Date()) /
+                      (1000 * 60 * 60 * 24)
+                  )}
                 </LinkStyled>
               </ListItem>
             ))}
