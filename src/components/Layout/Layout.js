@@ -3,6 +3,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { styled } from "styled-components";
+import Footer from "../Footer/Footer";
 
 const Navbar = styled.nav`
   background-color: var(--color-bg-accent);
@@ -105,6 +106,7 @@ export default function Layout({ children }) {
         </NavLinks>
       </Navbar>
       <main>{children}</main>
+      <Footer />
     </>
   );
 }
