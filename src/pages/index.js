@@ -13,8 +13,6 @@ export default function Home() {
     <div>
       {session ? (
         <>
-          <p>Signed in as {session.user.email}</p>
-          <button onClick={() => signOut()}>Sign out</button>
           <BeerBattleList />
           <JoinBeerBattleForm />
           <Link href="/beerbattle">Create Beer Battle</Link>
