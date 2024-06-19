@@ -19,7 +19,7 @@ export default function BeerBattleDashboard() {
   const [winner, setWinner] = useState(null);
 
   useEffect(() => {
-    if (data) {
+    if (data && data.beerBattle) {
       const endDate = new Date(data.beerBattle.endDate);
       const today = new Date();
       const diffTime = Math.abs(endDate - today);
@@ -36,7 +36,7 @@ export default function BeerBattleDashboard() {
     try {
       const response = await fetch(`/api/beerlog/battle/${battleId}`);
       const logs = await response.json();
-
+      console.log("Winner calc logs: ", logs);
       const participantsLogCount = logs.reduce((acc, log) => {
         acc[log.user] = (acc[log.user] || 0) + 1;
         return acc;
@@ -61,9 +61,10 @@ export default function BeerBattleDashboard() {
   };
 
   if (error) return <div>Failed to load</div>;
-  if (!data) return <div>Loading...</div>;
+  if (!data || !data.beerBattle) return <div>Loading...</div>;
 
   const { beerBattle, participants } = data;
+  console.log("Beer Battle ID: ", id);
 
   return (
     <div>

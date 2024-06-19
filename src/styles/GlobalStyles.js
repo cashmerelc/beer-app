@@ -44,7 +44,8 @@ const GlobalStyle = createGlobalStyle`
   --color-success: var(--color-primary-green);
   }
 
-  body {
+  html, body {
+    height: 100%;
     margin: 0;
     padding: 0;
     box-sizing: border-box;

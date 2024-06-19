@@ -3,11 +3,12 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 
-console.log("Styled: ", styled);
 const Container = styled.div`
   background-color: var(--color-bg-main);
   color: var(--text-color);
   padding: 20px;
+  width: 100%;
+  flex: 1;
 `;
 
 const Title = styled.h2`
