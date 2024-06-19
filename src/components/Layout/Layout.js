@@ -39,6 +39,23 @@ const DropdownMenu = styled.div`
   box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
   z-index: 1;
   display: ${(props) => (props.show ? "block" : "none")};
+  border-radius: 4px;
+  overflow: hidden;
+`;
+
+const DropdownItem = styled.div`
+  padding: 10px 20px;
+  cursor: pointer;
+  color: var(--color-text-main);
+  text-align: left;
+
+  &:hover {
+    background-color: var(--color-bg-secondary);
+  }
+
+  & + & {
+    border-top: 1px solid var(--color-bg-accent);
+  }
 `;
 
 export default function Layout({ children }) {
@@ -76,8 +93,10 @@ export default function Layout({ children }) {
                 />
               </ProfileButton>
               <DropdownMenu show={dropdownOpen}>
-                <Link href="/profile">Profile</Link>
-                <button onClick={() => signOut()}>Sign out</button>
+                <DropdownItem>
+                  <Link href="/profile">Profile</Link>
+                </DropdownItem>
+                <DropdownItem onClick={() => signOut()}>Sign out</DropdownItem>
               </DropdownMenu>
             </>
           ) : (
