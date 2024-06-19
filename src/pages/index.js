@@ -55,7 +55,7 @@ export default function Home() {
             height={200}
             style={{ borderRadius: "20%" }}
           />
-          <Title>Try "thest" unique beers</Title>
+          <Title>Try &quot;thest&quot; unique beers</Title>
           <SectionTitle>Drink Responsibly</SectionTitle>
         </CenteredContent>
       )}
