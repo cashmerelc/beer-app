@@ -6,7 +6,7 @@ import User from "../../../db/models/User";
 export default async function handler(req, res) {
   await dbConnect();
   const { id } = req.query;
-
+  console.log("ID in API Route: ", id);
   if (req.method === "GET") {
     try {
       const beerBattle = await BeerBattle.findById(id).populate("participants");
