@@ -1,3 +1,4 @@
+import { styled } from "styled-components";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import { useSession } from "next-auth/react";
@@ -5,6 +6,94 @@ import { useEffect, useState } from "react";
 import BeerSearch from "../../components/Form/BeerSearch";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
+
+const Container = styled.div`
+  background-color: var(--color-bg-main);
+  color: var(--color-text-main);
+  padding: 20px;
+  min-height: calc(
+    100vh - 120px
+  ); /* Adjust based on your header and footer heights */
+  display: flex;
+  flex-direction: column;
+`;
+
+const Header = styled.div`
+  margin-bottom: 20px;
+  text-align: center;
+`;
+
+const Title = styled.h1`
+  font-size: 2.5rem;
+  color: var(--color-text-main);
+`;
+
+const SubTitle = styled.p`
+  font-size: 1.2rem;
+  color: var(--color-text-secondary);
+`;
+
+const ParticipantsSection = styled.div`
+  margin-top: 30px;
+`;
+
+const ParticipantList = styled.ul`
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+`;
+
+const ParticipantItem = styled.li`
+  background-color: var(--color-bg-secondary);
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  text-align: center;
+`;
+
+const ParticipantName = styled.h3`
+  font-size: 1.5rem;
+  color: var(--color-text-light);
+`;
+
+const ParticipantDetails = styled.p`
+  font-size: 1rem;
+  color: var(--color-text-secondary);
+`;
+
+const BeerLogButton = styled.button`
+  background-color: var(--color-button-hover-bg);
+  color: var(--color-text-light);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+  &:hover {
+    background-color: var(--color-bg-main);
+  }
+`;
+
+const AddBeerSection = styled.div`
+  margin-top: 40px;
+  text-align: center;
+`;
+
+const AddBeerButton = styled.button`
+  background-color: var(--color-button-hover-bg);
+  color: var(--color-text-light);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  &:hover {
+    background-color: var(--color-bg-main);
+  }
+`;
 
 export default function BeerBattleDashboard() {
   const router = useRouter();
@@ -36,7 +125,6 @@ export default function BeerBattleDashboard() {
     try {
       const response = await fetch(`/api/beerlog/battle/${battleId}`);
       const logs = await response.json();
-      console.log("Winner calc logs: ", logs);
       const participantsLogCount = logs.reduce((acc, log) => {
         acc[log.user] = (acc[log.user] || 0) + 1;
         return acc;
@@ -64,65 +152,79 @@ export default function BeerBattleDashboard() {
   if (!data || !data.beerBattle) return <div>Loading...</div>;
 
   const { beerBattle, participants } = data;
-  console.log("Beer Battle ID: ", id);
 
   return (
-    <div>
-      <h1>{beerBattle.name}</h1>
-      <p>End Date: {new Date(beerBattle.endDate).toLocaleDateString()}</p>
-      <p>Days Remaining: {daysRemaining}</p>
+    <Container>
+      <Header>
+        <Title>{beerBattle.name}</Title>
+        <SubTitle>
+          End Date: {new Date(beerBattle.endDate).toLocaleDateString()}
+        </SubTitle>
+        <SubTitle>Days Remaining: {daysRemaining}</SubTitle>
+      </Header>
 
       {beerBattle.status === "ended" && winner ? (
         <div>
-          <h2>Winner: {winner.username}</h2>
-          <p>Beers logged: {winner.beersLogged}</p>
+          <Title>Winner: {winner.username}</Title>
+          <SubTitle>Beers logged: {winner.beersLogged}</SubTitle>
         </div>
       ) : (
         <>
-          <h2>Participants</h2>
-          <ul>
-            {participants.map((participant) => (
-              <li key={participant.user._id}>
-                <h3>{participant.user.username}</h3>
-                <p>Email: {participant.user.email}</p>
-                <p>Unique Beers Logged: {participant.beerLogs.length}</p>
-                <button
-                  onClick={() =>
-                    setShowBeerSearch(
-                      showBeerSearch === participant.user._id
-                        ? false
-                        : participant.user._id
-                    )
-                  }
-                >
-                  {showBeerSearch === participant.user._id
-                    ? "Hide Logs"
-                    : "Show Logs"}
-                </button>
-                {showBeerSearch === participant.user._id && (
-                  <ul>
-                    {participant.beerLogs.map((log) => (
-                      <li key={log._id}>
-                        <p>Beer: {log.beer.name}</p>
-                        <p>Rating: {log.rating}</p>
-                        <p>Review: {log.review}</p>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </li>
-            ))}
-          </ul>
+          <ParticipantsSection>
+            <Title>Participants</Title>
+            <ParticipantList>
+              {participants.map((participant) => (
+                <ParticipantItem key={participant.user._id}>
+                  <ParticipantName>{participant.user.username}</ParticipantName>
+                  <ParticipantDetails>
+                    Email: {participant.user.email}
+                  </ParticipantDetails>
+                  <ParticipantDetails>
+                    Unique Beers Logged: {participant.beerLogs.length}
+                  </ParticipantDetails>
+                  <BeerLogButton
+                    onClick={() =>
+                      setShowBeerSearch(
+                        showBeerSearch === participant.user._id
+                          ? false
+                          : participant.user._id
+                      )
+                    }
+                  >
+                    {showBeerSearch === participant.user._id
+                      ? "Hide Logs"
+                      : "Show Logs"}
+                  </BeerLogButton>
+                  {showBeerSearch === participant.user._id && (
+                    <ul>
+                      {participant.beerLogs.map((log) => (
+                        <li key={log._id}>
+                          <p>Beer: {log.beer.name}</p>
+                          <p>Rating: {log.rating}</p>
+                          <p>Review: {log.review}</p>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </ParticipantItem>
+              ))}
+            </ParticipantList>
+          </ParticipantsSection>
 
-          <h2>Add a Beer</h2>
-          <button onClick={() => setShowBeerSearch(!showBeerSearch)}>
-            {showBeerSearch ? "Cancel" : "Add Beer"}
-          </button>
-          {showBeerSearch && (
-            <BeerSearch beerBattleId={id} onBeerLogAdded={handleBeerLogAdded} />
-          )}
+          <AddBeerSection>
+            <Title>Add a Beer</Title>
+            <AddBeerButton onClick={() => setShowBeerSearch(!showBeerSearch)}>
+              {showBeerSearch ? "Cancel" : "Add Beer"}
+            </AddBeerButton>
+            {showBeerSearch && (
+              <BeerSearch
+                beerBattleId={id}
+                onBeerLogAdded={handleBeerLogAdded}
+              />
+            )}
+          </AddBeerSection>
         </>
       )}
-    </div>
+    </Container>
   );
 }
