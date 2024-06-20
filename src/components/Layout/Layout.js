@@ -106,7 +106,7 @@ export default function Layout({ children }) {
         </NavLinks>
       </Navbar>
       <main>{children}</main>
-      <Footer />
+      {session ? <Footer /> : <></>}
     </>
   );
 }
