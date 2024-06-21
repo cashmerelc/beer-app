@@ -123,21 +123,35 @@ export default function BeerBattleDashboard() {
 
   const calculateWinner = async (battleId) => {
     try {
-      const response = await fetch(`/api/beerlog/battle/${battleId}`);
+      const response = await fetch(`/api/beerlog/${battleId}`);
+      console.log("Response: ", response);
       const logs = await response.json();
+      console.log("Logs: " + JSON.stringify(logs));
       const participantsLogCount = logs.reduce((acc, log) => {
-        acc[log.user] = (acc[log.user] || 0) + 1;
+        const userId = log.user._id.toString();
+        acc[userId] = (acc[userId] || 0) + 1;
         return acc;
       }, {});
-
+      console.log("Participant Log Count: ", participantsLogCount);
       const winnerId = Object.keys(participantsLogCount).reduce((a, b) =>
         participantsLogCount[a] > participantsLogCount[b] ? a : b
       );
-
+      console.log("Winner Id: ", winnerId);
       const winnerResponse = await fetch(`/api/user/${winnerId}`);
       const winnerData = await winnerResponse.json();
+      console.log("WinnerData: ", winnerData);
+      const winnerLogsResponse = await fetch(`/api/beerlog/user/${winnerId}`);
+      if (!winnerLogsResponse.ok) {
+        throw new Error(
+          `Failed to fetch winner logs: ${winnerLogsResponse.statusText}`
+        );
+      }
+      const winnerLogs = await winnerLogsResponse.json();
 
-      setWinner(winnerData);
+      setWinner({
+        ...winnerData,
+        beersLogged: winnerLogs.length,
+      });
     } catch (error) {
       console.error("Error calculating winner:", error);
     }
@@ -153,19 +167,28 @@ export default function BeerBattleDashboard() {
 
   const { beerBattle, participants } = data;
 
+  console.log("Ended? ", beerBattle.status);
+  console.log("Winner: ", winner);
+
   return (
     <Container>
       <Header>
         <Title>{beerBattle.name}</Title>
-        <SubTitle>
-          End Date: {new Date(beerBattle.endDate).toLocaleDateString()}
-        </SubTitle>
-        <SubTitle>Days Remaining: {daysRemaining}</SubTitle>
+        {beerBattle.status === "ended" ? (
+          <></>
+        ) : (
+          <>
+            <SubTitle>
+              End Date: {new Date(beerBattle.endDate).toLocaleDateString()}
+            </SubTitle>
+            <SubTitle>Days Remaining: {daysRemaining}</SubTitle>
+          </>
+        )}
       </Header>
 
       {beerBattle.status === "ended" && winner ? (
         <div>
-          <Title>Winner: {winner.username}</Title>
+          <Title>Winner: {winner.email}</Title>
           <SubTitle>Beers logged: {winner.beersLogged}</SubTitle>
         </div>
       ) : (
@@ -210,19 +233,22 @@ export default function BeerBattleDashboard() {
               ))}
             </ParticipantList>
           </ParticipantsSection>
-
-          <AddBeerSection>
-            <Title>Add a Beer</Title>
-            <AddBeerButton onClick={() => setShowBeerSearch(!showBeerSearch)}>
-              {showBeerSearch ? "Cancel" : "Add Beer"}
-            </AddBeerButton>
-            {showBeerSearch && (
-              <BeerSearch
-                beerBattleId={id}
-                onBeerLogAdded={handleBeerLogAdded}
-              />
-            )}
-          </AddBeerSection>
+          {beerBattle.status === "ended" ? (
+            <></>
+          ) : (
+            <AddBeerSection>
+              <Title>Add a Beer</Title>
+              <AddBeerButton onClick={() => setShowBeerSearch(!showBeerSearch)}>
+                {showBeerSearch ? "Cancel" : "Add Beer"}
+              </AddBeerButton>
+              {showBeerSearch && (
+                <BeerSearch
+                  beerBattleId={id}
+                  onBeerLogAdded={handleBeerLogAdded}
+                />
+              )}
+            </AddBeerSection>
+          )}
         </>
       )}
     </Container>
