@@ -123,34 +123,47 @@ export default function BeerBattleDashboard() {
 
   const calculateWinner = async (battleId) => {
     try {
-      const response = await fetch(`/api/beerlog/${battleId}`);
-      console.log("Response: ", response);
+      console.log(`Fetching logs for battleId: ${battleId}`);
+      const response = await fetch(`/api/beerlog/battle/${battleId}`);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch logs: ${response.statusText}`);
+      }
       const logs = await response.json();
-      console.log("Logs: " + JSON.stringify(logs));
+      console.log("Fetched logs:", JSON.stringify(logs, null, 2));
+
+      if (!logs.length) {
+        console.log("No logs found for this beer battle.");
+        return;
+      }
+
       const participantsLogCount = logs.reduce((acc, log) => {
         const userId = log.user._id.toString();
         acc[userId] = (acc[userId] || 0) + 1;
         return acc;
       }, {});
-      console.log("Participant Log Count: ", participantsLogCount);
+      console.log(
+        "Participant Log Count: ",
+        JSON.stringify(participantsLogCount, null, 2)
+      );
+
       const winnerId = Object.keys(participantsLogCount).reduce((a, b) =>
         participantsLogCount[a] > participantsLogCount[b] ? a : b
       );
-      console.log("Winner Id: ", winnerId);
+      console.log("Winner ID: ", winnerId);
+
+      console.log(`Fetching winner data for userId: ${winnerId}`);
       const winnerResponse = await fetch(`/api/user/${winnerId}`);
-      const winnerData = await winnerResponse.json();
-      console.log("WinnerData: ", winnerData);
-      const winnerLogsResponse = await fetch(`/api/beerlog/user/${winnerId}`);
-      if (!winnerLogsResponse.ok) {
+      if (!winnerResponse.ok) {
         throw new Error(
-          `Failed to fetch winner logs: ${winnerLogsResponse.statusText}`
+          `Failed to fetch winner data: ${winnerResponse.statusText}`
         );
       }
-      const winnerLogs = await winnerLogsResponse.json();
+      const winnerData = await winnerResponse.json();
+      console.log("Winner Data: ", JSON.stringify(winnerData, null, 2));
 
       setWinner({
         ...winnerData,
-        beersLogged: winnerLogs.length,
+        beersLogged: participantsLogCount[winnerId],
       });
     } catch (error) {
       console.error("Error calculating winner:", error);
