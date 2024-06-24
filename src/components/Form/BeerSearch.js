@@ -1,7 +1,7 @@
 import { useState } from "react";
 import useSWR from "swr";
 import { useSession } from "next-auth/react";
-import styled from "styled-components";
+import { styled } from "styled-components";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
