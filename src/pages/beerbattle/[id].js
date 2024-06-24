@@ -40,10 +40,6 @@ const ParticipantsSection = styled.div`
 const ParticipantList = styled.ul`
   list-style: none;
   padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
 `;
 
 const ParticipantItem = styled.li`
@@ -51,8 +47,7 @@ const ParticipantItem = styled.li`
   padding: 15px;
   border-radius: 8px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  width: 300px;
-  text-align: center;
+  margin-bottom: 20px;
 `;
 
 const ParticipantName = styled.h3`
@@ -118,18 +113,13 @@ const AddBeerButton = styled.button`
 export default function BeerBattleDashboard() {
   const router = useRouter();
   const { id } = router.query;
-  console.log("ID from router query:", id); // Debugging line
-
   const { data, error, mutate } = useSWR(
-    id ? `/api/beerbattle/${id}` : null,
+    () => (id ? `/api/beerbattle/${id}` : null),
     fetcher
   );
-  console.log("Data from useSWR:", data); // Debugging line
-  console.log("Error from useSWR:", error); // Debugging line
-
   const { data: session } = useSession();
   const [daysRemaining, setDaysRemaining] = useState(null);
-  const [showBeerSearch, setShowBeerSearch] = useState(false);
+  const [showBeerLogs, setShowBeerLogs] = useState(null);
   const [winner, setWinner] = useState(null);
 
   useEffect(() => {
@@ -205,6 +195,9 @@ export default function BeerBattleDashboard() {
 
   const { beerBattle, participants } = data;
 
+  console.log("Ended? ", beerBattle.status);
+  console.log("Winner: ", winner);
+
   return (
     <Container>
       <Header>
@@ -243,18 +236,18 @@ export default function BeerBattleDashboard() {
                   </ParticipantDetails>
                   <BeerLogButton
                     onClick={() =>
-                      setShowBeerSearch(
-                        showBeerSearch === participant.user._id
-                          ? false
+                      setShowBeerLogs(
+                        showBeerLogs === participant.user._id
+                          ? null
                           : participant.user._id
                       )
                     }
                   >
-                    {showBeerSearch === participant.user._id
+                    {showBeerLogs === participant.user._id
                       ? "Hide Logs"
                       : "Show Logs"}
                   </BeerLogButton>
-                  {showBeerSearch === participant.user._id && (
+                  {showBeerLogs === participant.user._id && (
                     <BeerLogList>
                       {participant.beerLogs.map((log) => (
                         <BeerLogItem key={log._id}>
