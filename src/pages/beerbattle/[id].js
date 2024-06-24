@@ -78,26 +78,6 @@ const BeerLogButton = styled.button`
   }
 `;
 
-const BeerLogList = styled.ul`
-  list-style: none;
-  padding: 0;
-  margin-top: 10px;
-  background-color: var(--color-bg-main);
-  border-radius: 8px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  max-height: 300px; /* Set a max-height for the list */
-  overflow-y: auto; /* Add scroll for overflow content */
-`;
-
-const BeerLogItem = styled.li`
-  padding: 10px;
-  border-bottom: 1px solid var(--color-text-secondary);
-  &:last-child {
-    border-bottom: none;
-  }
-  font-size: 0.9rem; /* Smaller font size for better readability */
-`;
-
 const AddBeerSection = styled.div`
   margin-top: 40px;
   text-align: center;
@@ -253,21 +233,15 @@ export default function BeerBattleDashboard() {
                       : "Show Logs"}
                   </BeerLogButton>
                   {showBeerSearch === participant.user._id && (
-                    <BeerLogList>
+                    <ul>
                       {participant.beerLogs.map((log) => (
-                        <BeerLogItem key={log._id}>
-                          <p>
-                            <strong>Beer:</strong> {log.beer.name}
-                          </p>
-                          <p>
-                            <strong>Rating:</strong> {log.rating}
-                          </p>
-                          <p>
-                            <strong>Review:</strong> {log.review}
-                          </p>
-                        </BeerLogItem>
+                        <li key={log._id}>
+                          <p>Beer: {log.beer.name}</p>
+                          <p>Rating: {log.rating}</p>
+                          <p>Review: {log.review}</p>
+                        </li>
                       ))}
-                    </BeerLogList>
+                    </ul>
                   )}
                 </ParticipantItem>
               ))}
