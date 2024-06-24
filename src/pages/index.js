@@ -1,4 +1,3 @@
-// src/pages/index.js
 import { useSession, signIn, signOut } from "next-auth/react";
 import BeerBattleList from "../components/Card/BeerBattleList";
 import Image from "next/image";

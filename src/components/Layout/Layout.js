@@ -60,7 +60,7 @@ const DropdownItem = styled.div`
 `;
 
 const MainContent = styled.main`
-  padding-bottom: 210px;
+  padding-bottom: 120px; /* Adjust based on your footer height */
 `;
 
 export default function Layout({ children }) {
