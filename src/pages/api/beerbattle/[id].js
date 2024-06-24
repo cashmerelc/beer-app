@@ -2,6 +2,7 @@ import dbConnect from "../../../db/dbConnect";
 import BeerBattle from "../../../db/models/BeerBattle";
 import BeerLog from "../../../db/models/BeerLog";
 import User from "../../../db/models/User";
+import Beer from "../../../db/models/Beer";
 
 export default async function handler(req, res) {
   try {
