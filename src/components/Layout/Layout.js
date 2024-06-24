@@ -59,6 +59,10 @@ const DropdownItem = styled.div`
   }
 `;
 
+const MainContent = styled.main`
+  padding-bottom: 210px;
+`;
+
 export default function Layout({ children }) {
   const { data: session } = useSession();
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -105,7 +109,7 @@ export default function Layout({ children }) {
           )}
         </NavLinks>
       </Navbar>
-      <main>{children}</main>
+      <MainContent>{children}</MainContent>
       {session ? <Footer /> : <></>}
     </>
   );

@@ -8,48 +8,52 @@ const FooterContainer = styled.footer`
   padding: 20px;
   text-align: center;
   width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  box-shadow: 0px -2px 10px rgba(0, 0, 0, 0.1);
+`;
+
+const FooterContent = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 100px;
+`;
+
+const FormContainer = styled.div`
+  width: 100%;
+  max-width: 300px;
 `;
 
 const FooterLink = styled(Link)`
+  display: block;
+  background-color: var(--color-button-bg);
   color: var(--color-text-light);
-  margin: 0 10px;
+  padding: 8px;
+  border-radius: 4px;
+  text-align: center;
   text-decoration: none;
   &:hover {
-    text-decoration: underline;
+    background-color: var(--color-button-hover-bg);
   }
 `;
 
 const CopyText = styled.p`
   font-size: 12px;
-`;
-
-const FormContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-  width: 100%;
-  max-width: 800px;
-  margin-bottom: 20px;
-`;
-
-const FormItem = styled.div`
-  flex: 1;
-  display: flex;
-  justify-content: center;
+  margin-top: 20px;
 `;
 
 export default function Footer() {
   return (
     <FooterContainer>
-      <FormContainer>
-        <FormItem>
+      <FooterContent>
+        <FormContainer>
           <JoinBeerBattleForm />
-        </FormItem>
-        <FormItem>
-          <FooterLink href="/beerbattle">Create Beer Battle</FooterLink>
-        </FormItem>
-      </FormContainer>
+        </FormContainer>
+        <FooterLink href="/beerbattle">Create Beer Battle</FooterLink>
+      </FooterContent>
       <CopyText>
         &copy; {new Date().getFullYear()} Beer Battle. All rights reserved.
       </CopyText>
