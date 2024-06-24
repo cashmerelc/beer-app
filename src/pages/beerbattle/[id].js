@@ -118,10 +118,15 @@ const AddBeerButton = styled.button`
 export default function BeerBattleDashboard() {
   const router = useRouter();
   const { id } = router.query;
+  console.log("ID from router query:", id); // Debugging line
+
   const { data, error, mutate } = useSWR(
-    () => (id ? `/api/beerbattle/${id}` : null),
+    id ? `/api/beerbattle/${id}` : null,
     fetcher
   );
+  console.log("Data from useSWR:", data); // Debugging line
+  console.log("Error from useSWR:", error); // Debugging line
+
   const { data: session } = useSession();
   const [daysRemaining, setDaysRemaining] = useState(null);
   const [showBeerSearch, setShowBeerSearch] = useState(false);
@@ -199,9 +204,6 @@ export default function BeerBattleDashboard() {
   if (!data || !data.beerBattle) return <div>Loading...</div>;
 
   const { beerBattle, participants } = data;
-
-  console.log("Ended? ", beerBattle.status);
-  console.log("Winner: ", winner);
 
   return (
     <Container>
