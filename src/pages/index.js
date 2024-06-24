@@ -33,6 +33,7 @@ const SectionTitle = styled.h3`
 
 export default function Home() {
   const { data: session } = useSession();
+  console.log("MONGODB_URI: ", process.env.MONGODB_URI);
 
   console.log("Session Data: ", session);
 
