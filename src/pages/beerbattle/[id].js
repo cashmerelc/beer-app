@@ -120,6 +120,7 @@ export default function BeerBattleDashboard() {
   const { data: session } = useSession();
   const [daysRemaining, setDaysRemaining] = useState(null);
   const [showBeerLogs, setShowBeerLogs] = useState(null);
+  const [showBeerSearch, setShowBeerSearch] = useState(false); // Initialize showBeerSearch state
   const [winner, setWinner] = useState(null);
 
   useEffect(() => {
