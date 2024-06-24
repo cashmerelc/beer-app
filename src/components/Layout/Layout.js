@@ -60,17 +60,7 @@ const DropdownItem = styled.div`
 `;
 
 const MainContent = styled.main`
-  padding-bottom: 120px; /* Adjust based on your footer height */
-  width: 100%;
-  max-width: 480px; /* Mobile size max width */
-  margin: 0 auto; /* Center content */
-`;
-
-const AppContainer = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  padding-bottom: 210px;
 `;
 
 export default function Layout({ children }) {
@@ -80,13 +70,13 @@ export default function Layout({ children }) {
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
   };
-
+  console.log("Image: ", Image);
   return (
-    <AppContainer>
+    <>
       <Navbar>
         <Logo>
           <Link href="/">
-            <Image
+            <Image.default
               src="/images/bblogo.png"
               alt="Beer Battle Logo"
               width={50}
@@ -99,7 +89,7 @@ export default function Layout({ children }) {
           {session ? (
             <>
               <ProfileButton onClick={toggleDropdown}>
-                <Image
+                <Image.default
                   src={session.user.image}
                   alt="Profile"
                   width={40}
@@ -120,7 +110,7 @@ export default function Layout({ children }) {
         </NavLinks>
       </Navbar>
       <MainContent>{children}</MainContent>
-      {session ? <Footer /> : null}
-    </AppContainer>
+      {session ? <Footer /> : <></>}
+    </>
   );
 }
